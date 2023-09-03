@@ -14,8 +14,6 @@ export function RecentExpensesScreen({ route, navigation }) {
 
   const recentData = data.filter((ex) => ex.dateI > aWeekAgo);
 
-  console.log("data", data[0]?.dateI, aWeekAgo);
-
   const limitedData = [...recentData].slice(-10).reverse();
 
   const recentExpenseTotal = limitedData
