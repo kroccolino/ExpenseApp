@@ -1,17 +1,20 @@
-import { configureStore, createSlice } from "@reduxjs/toolkit";
+import { configureStore, createSlice } from '@reduxjs/toolkit';
 
-const expenseSlice = createSlice({
-  name: "expenses",
+export const expenseSlice = createSlice({
+  name: 'expenses',
   initialState: {
     expenses: [],
     showModal: false,
     showEdit: false,
-    modalTitle: "",
-    editedExpenseId: "",
+    modalTitle: '',
+    editedExpenseId: '',
   },
   reducers: {
     addExpense: (state, action) => {
       state.expenses = [...state.expenses, action.payload.expense];
+    },
+    setExpense: (state, action) => {
+      state.expenses = action.payload;
     },
     editExpense: (state, action) => {
       i = action.payload.expenseIndex;
@@ -36,17 +39,19 @@ const expenseSlice = createSlice({
   },
 });
 
-export const store = configureStore({
-  reducer: {
-    expense: expenseSlice.reducer,
-  },
-});
+// export const store = configureStore({
+//   reducer: {
+//     expense: expenseSlice.reducer,
+//   },
+// });
 
 export const {
   addExpense,
+  setExpense,
   editExpense,
   removeExpense,
   showExpenseModal,
   showEditModal,
 } = expenseSlice.actions;
-export default store;
+
+//export default store;

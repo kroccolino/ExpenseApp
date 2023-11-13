@@ -5,7 +5,6 @@ import {
   FlatList,
   TouchableOpacity,
 } from "react-native";
-//import { TouchableOpacity } from "react-native-gesture-handler";
 import ExpenseItem from "./ExpenseItem";
 import { useSelector, useDispatch } from "react-redux";
 import { showExpenseModal, showEditModal } from "../store/store";

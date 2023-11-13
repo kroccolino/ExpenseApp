@@ -7,6 +7,7 @@ export const Colors = {
   buttonColor: "#6c1e18",
   mainComplement: "#c4a390",
   secondComplement: "#0fb16e",
+  errorBG: "#ff8484",
 };
 
 export default Colors;

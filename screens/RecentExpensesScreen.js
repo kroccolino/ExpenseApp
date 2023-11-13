@@ -3,12 +3,35 @@ import Display from "../components/Display";
 import NewExpenseModal from "../components/NewExpenseModal";
 import ExpenseList from "../components/ExpenseList";
 import { useSelector, useDispatch } from "react-redux";
-import { showExpenseModal } from "../store/store";
+import { showExpenseModal, setExpense } from "../store/store";
 import useHeaderButton from "../customHooks.js/useHeaderButton";
 
+import { getExpenses } from "../components/util/http";
+import { useEffect, useState } from "react";
+import ErrorOverlay from "../components/util/ErrorOverlay";
+
 export function RecentExpensesScreen({ route, navigation }) {
-  const data = useSelector((data) => data.expense.expenses);
   const dispatch = useDispatch();
+
+  const [error, setError] = useState();
+
+  useEffect(() => {
+    async function fetchExpenses() {
+      try {
+        const savedExpenses = await getExpenses();
+        dispatch(setExpense(savedExpenses));
+      } catch (error) {
+        setError("Error fetching your expenses, please try again!");
+      }
+    }
+    fetchExpenses();
+  }, []);
+
+  function errorHandler() {
+    setError(null);
+  }
+
+  const data = useSelector((data) => data.expense.expenses);
 
   aWeekAgo = new Date().getTime() - 604800000;
 
@@ -30,6 +53,10 @@ export function RecentExpensesScreen({ route, navigation }) {
   }
 
   useHeaderButton(navigation);
+
+  if (error) {
+    return <ErrorOverlay message={error} onPress={errorHandler} />;
+  }
 
   return (
     <>

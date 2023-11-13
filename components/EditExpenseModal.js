@@ -13,6 +13,8 @@ import Ionicons from "@expo/vector-icons/Ionicons";
 import { showEditModal } from "../store/store";
 import { useDispatch } from "react-redux";
 import { removeExpense, editExpense } from "../store/store";
+import { deleteExpense, updateExpense } from "./util/http";
+import ErrorOverlay from "./util/ErrorOverlay";
 
 function EditExpenseModal() {
   const dispatch = useDispatch();
@@ -23,9 +25,12 @@ function EditExpenseModal() {
 
   const [name, setName] = useState(data[expenseIndex]?.name);
   const [value, setValue] = useState(data[expenseIndex]?.value);
+  const [error, setError] = useState();
 
   function handleRemoveExpense() {
     dispatch(removeExpense());
+
+    deleteExpense(expenseId);
     toggleExpenseEditVisible();
   }
 
@@ -34,14 +39,25 @@ function EditExpenseModal() {
   }
 
   function handleOnSubmit() {
-    dispatch(editExpense({ expenseIndex, name, value }));
-    dispatch(showEditModal());
+    try {
+      dispatch(editExpense({ expenseIndex, name, value }));
+
+      updateExpense({ name, value }, expenseId);
+      //PROBLEM - LOSE THE TIME IN THE DATABASE
+      dispatch(showEditModal());
+    } catch (error) {
+      setError(`we couldn't edit your expense`);
+    }
   }
   function handleOnChangeName(value) {
     setName(value);
   }
   function handleOnChangeValue(value) {
     setValue("$" + value);
+  }
+
+  if (error) {
+    return <ErrorOverlay message={error} onPress={() => {}} />;
   }
 
   return (
